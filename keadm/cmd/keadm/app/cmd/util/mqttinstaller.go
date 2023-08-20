@@ -1,3 +1,5 @@
+//go:build !windows
+
 /*
 Copyright 2019 The KubeEdge Authors.
 
@@ -16,12 +18,12 @@ limitations under the License.
 
 package util
 
-//MQTTInstTool embeds Common struct and It implements ToolsInstaller interface
+// MQTTInstTool embeds Common struct and It implements ToolsInstaller interface
 type MQTTInstTool struct {
 	Common
 }
 
-//InstallTools sets the OS interface, it simply installs the said version
+// InstallTools sets the OS interface, it simply installs the said version
 func (m *MQTTInstTool) InstallTools() error {
 	m.SetOSInterface(GetOSInterface())
 	err := m.InstallMQTT()
@@ -31,8 +33,8 @@ func (m *MQTTInstTool) InstallTools() error {
 	return nil
 }
 
-//TearDown should uninstall MQTT, but it is not required either for cloud or edge node.
-//It is defined so that MQTTInstTool implements ToolsInstaller interface
+// TearDown should uninstall MQTT, but it is not required either for cloud or edge node.
+// It is defined so that MQTTInstTool implements ToolsInstaller interface
 func (m *MQTTInstTool) TearDown() error {
 	return nil
 }

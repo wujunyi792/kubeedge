@@ -27,6 +27,7 @@ import (
 )
 
 func request(opt *common.JoinOptions, step *common.Step) error {
+	return nil
 	imageSet := image.EdgeSet(opt.ImageRepository, opt.KubeEdgeVersion)
 	images := imageSet.List()
 
