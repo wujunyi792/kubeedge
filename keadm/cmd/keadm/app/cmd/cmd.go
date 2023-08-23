@@ -19,6 +19,10 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 
+	"github.com/kubeedge/kubeedge/keadm/cmd/keadm/app/cmd/beta"
+	"github.com/kubeedge/kubeedge/keadm/cmd/keadm/app/cmd/cloud"
+	"github.com/kubeedge/kubeedge/keadm/cmd/keadm/app/cmd/debug"
+	"github.com/kubeedge/kubeedge/keadm/cmd/keadm/app/cmd/deprecated"
 	"github.com/kubeedge/kubeedge/keadm/cmd/keadm/app/cmd/edge"
 )
 
@@ -66,22 +70,22 @@ func NewKubeedgeCommand() *cobra.Command {
 
 	cmds.ResetFlags()
 	// deprecated init/join/reset cmds
-	//cmds.AddCommand(deprecated.NewDeprecated())
+	cmds.AddCommand(deprecated.NewDeprecated())
 
-	//cmds.AddCommand(NewCmdVersion())
-	//cmds.AddCommand(cloud.NewGettoken())
-	//cmds.AddCommand(debug.NewEdgeDebug())
+	cmds.AddCommand(NewCmdVersion())
+	cmds.AddCommand(cloud.NewGettoken())
+	cmds.AddCommand(debug.NewEdgeDebug())
 
 	// recommended cmds
 	cmds.AddCommand(edge.NewEdgeJoin())
-	//cmds.AddCommand(cloud.NewCloudInit())
-	//cmds.AddCommand(cloud.NewManifestGenerate())
-	//cmds.AddCommand(newCmdConfig())
-	//cmds.AddCommand(NewKubeEdgeReset())
+	cmds.AddCommand(cloud.NewCloudInit())
+	cmds.AddCommand(cloud.NewManifestGenerate())
+	cmds.AddCommand(newCmdConfig())
+	cmds.AddCommand(NewKubeEdgeReset())
 
 	// beta cmds
-	//cmds.AddCommand(beta.NewBeta())
-	//cmds.AddCommand(edge.NewEdgeUpgrade())
+	cmds.AddCommand(beta.NewBeta())
+	cmds.AddCommand(edge.NewEdgeUpgrade())
 
 	return cmds
 }
