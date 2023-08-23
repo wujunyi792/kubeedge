@@ -5,11 +5,12 @@ import (
 	"errors"
 	"fmt"
 	"os/exec"
+	"runtime"
 	"strings"
 	"syscall"
 )
 
-//Command defines commands to be executed and captures std out and std error
+// Command defines commands to be executed and captures std out and std error
 type Command struct {
 	Cmd      *exec.Cmd
 	StdOut   []byte
@@ -18,6 +19,11 @@ type Command struct {
 }
 
 func NewCommand(command string) *Command {
+	if runtime.GOOS == "windows" {
+		return &Command{
+			Cmd: exec.Command("powershell", "-c", command),
+		}
+	}
 	return &Command{
 		Cmd: exec.Command("bash", "-c", command),
 	}
