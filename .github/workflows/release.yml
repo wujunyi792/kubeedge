@@ -1,6 +1,8 @@
 name: build release, release image to DockerHub
 on:
   push:
+    tags:
+      - v*
 #  release:
 #    types:
 #      - published
@@ -20,7 +22,7 @@ jobs:
 #        ARM_VERSION: [GOARM7, GOARM8, ""]
         target: [kubeedge]
         os: [windows]
-        ARM_VERSION: []
+        ARM_VERSION: [ "" ]
 #        include:
 #          - target: kubeedge
 #            os: windows
