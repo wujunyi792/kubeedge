@@ -27,7 +27,6 @@ jobs:
       hash-edgesite-amd64: ${{ steps.hash.outputs.hash-edgesite-amd64 }}
       hash-edgesite-arm64: ${{ steps.hash.outputs.hash-edgesite-arm64 }}
       hash-edgesite-arm:   ${{ steps.hash.outputs.hash-edgesite-arm }}
-
     steps:
       - name: checkout code
         uses: actions/checkout@v3
