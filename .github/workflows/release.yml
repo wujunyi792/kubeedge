@@ -18,9 +18,9 @@ jobs:
 #        target: [kubeedge, edgesite, keadm]
 #        os: [linux]
 #        ARM_VERSION: [GOARM7, GOARM8, ""]
-        target: [ kubeedge, edgesite, keadm ]
-        os: [ linux ]
-        ARM_VERSION: [ GOARM7, GOARM8, "" ]
+        target: []
+        os: []
+        ARM_VERSION: []
         include:
           - target: kubeedge
             os: windows
