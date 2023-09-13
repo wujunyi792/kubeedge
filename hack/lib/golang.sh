@@ -211,11 +211,15 @@ IFS=" " read -ra KUBEEDGE_ALL_BINARIES<<< "$(kubeedge::golang::get_all_binaries)
 
 kubeedge::golang::build_binaries() {
   kubeedge::check::env
+  echo "building kubeedge binaries"
   local -a targets=()
   local binArg
+  echo "build targets"
   for binArg in "$@"; do
     targets+=("$(kubeedge::golang::get_target_by_binary $binArg)")
+    echo "targets: $(kubeedge::golang::get_target_by_binary $binArg)"
   done
+  echo "build targets end"
 
   if [[ ${#targets[@]} -eq 0 ]]; then
     targets=("${KUBEEDGE_ALL_TARGETS[@]}")
