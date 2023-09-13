@@ -52,7 +52,8 @@ function release() {
   fi
 
   echo "building release:" ${targets[@]} "ARCH:"${ARCH}
-  kubeedge::version::get_version_info
+#  kubeedge::version::get_version_info
+  GIT_VERSION=v1.15.1-test
   VERSION=${GIT_VERSION}
 
   echo "version:" ${VERSION}
