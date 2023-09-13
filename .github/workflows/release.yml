@@ -18,14 +18,14 @@ jobs:
 #        target: [kubeedge, edgesite, keadm]
 #        os: [linux]
 #        ARM_VERSION: [GOARM7, GOARM8, ""]
-        target: []
-        os: []
+        target: [kubeedge]
+        os: [windows]
         ARM_VERSION: []
-        include:
-          - target: kubeedge
-            os: windows
-          - target: keadm
-            os: windows
+#        include:
+#          - target: kubeedge
+#            os: windows
+#          - target: keadm
+#            os: windows
     outputs:
 #      hash-kubeedge-linux-amd64: ${{ steps.hash.outputs.hash-kubeedge-linux-amd64 }}
       hash-kubeedge-windows-amd64: ${{ steps.hash.outputs.hash-kubeedge-windows-amd64 }}
