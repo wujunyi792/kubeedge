@@ -15,20 +15,28 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-        target: [kubeedge, edgesite, keadm]
-        os: [linux]
-        ARM_VERSION: [GOARM7, GOARM8, ""]
+#        target: [kubeedge, edgesite, keadm]
+#        os: [linux]
+#        ARM_VERSION: [GOARM7, GOARM8, ""]
+        target: [ kubeedge, edgesite, keadm ]
+        os: [ linux ]
+        ARM_VERSION: [ GOARM7, GOARM8, "" ]
+        include:
+          - target: kubeedge
+            os: windows
+          - target: keadm
+            os: windows
     outputs:
-      hash-kubeedge-linux-amd64: ${{ steps.hash.outputs.hash-kubeedge-linux-amd64 }}
+#      hash-kubeedge-linux-amd64: ${{ steps.hash.outputs.hash-kubeedge-linux-amd64 }}
       hash-kubeedge-windows-amd64: ${{ steps.hash.outputs.hash-kubeedge-windows-amd64 }}
-      hash-kubeedge-linux-arm64: ${{ steps.hash.outputs.hash-kubeedge-linux-arm64 }}
-      hash-kubeedge-linux-arm:   ${{ steps.hash.outputs.hash-kubeedge-linux-arm }}
-      hash-keadm-linux-amd64:    ${{ steps.hash.outputs.hash-keadm-linux-amd64 }}
-      hash-keadm-linux-arm64:    ${{ steps.hash.outputs.hash-keadm-linux-arm64 }}
-      hash-keadm-linux-arm:      ${{ steps.hash.outputs.hash-keadm-linux-arm }}
-      hash-edgesite-linux-amd64: ${{ steps.hash.outputs.hash-edgesite-linux-amd64 }}
-      hash-edgesite-linux-arm64: ${{ steps.hash.outputs.hash-edgesite-linux-arm64 }}
-      hash-edgesite-linux-arm:   ${{ steps.hash.outputs.hash-edgesite-linux-arm }}
+#      hash-kubeedge-linux-arm64: ${{ steps.hash.outputs.hash-kubeedge-linux-arm64 }}
+#      hash-kubeedge-linux-arm:   ${{ steps.hash.outputs.hash-kubeedge-linux-arm }}
+#      hash-keadm-linux-amd64:    ${{ steps.hash.outputs.hash-keadm-linux-amd64 }}
+#      hash-keadm-linux-arm64:    ${{ steps.hash.outputs.hash-keadm-linux-arm64 }}
+#      hash-keadm-linux-arm:      ${{ steps.hash.outputs.hash-keadm-linux-arm }}
+#      hash-edgesite-linux-amd64: ${{ steps.hash.outputs.hash-edgesite-linux-amd64 }}
+#      hash-edgesite-linux-arm64: ${{ steps.hash.outputs.hash-edgesite-linux-arm64 }}
+#      hash-edgesite-linux-arm:   ${{ steps.hash.outputs.hash-edgesite-linux-arm }}
     steps:
       - name: checkout code
         uses: actions/checkout@v3
