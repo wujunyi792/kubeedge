@@ -1,8 +1,9 @@
 name: build release, release image to DockerHub
 on:
-  release:
-    types:
-      - published
+  push:
+#  release:
+#    types:
+#      - published
 
 env:
   CONTAINER_RUN_OPTIONS: " "
