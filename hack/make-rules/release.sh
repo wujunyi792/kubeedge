@@ -55,6 +55,8 @@ function release() {
   kubeedge::version::get_version_info
   VERSION=${GIT_VERSION}
 
+  echo "version:" ${VERSION}
+
   for bin in ${targets[@]}; do
     case "${bin}" in
       "edgesite")
