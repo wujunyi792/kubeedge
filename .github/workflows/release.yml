@@ -52,7 +52,7 @@ jobs:
           fetch-depth: 0
       - name: Making and packaging
         run: |
-          if [ "${{ matrix.os }}" != "windows" ]; then docker pull kubeedge/build-tools:1.17.13-ke1; fi
+          docker pull kubeedge/build-tools:1.17.13-ke1
           make release WHAT=${{ matrix.target }} ARM_VERSION=${{ matrix.ARM_VERSION }} OS=${{ matrix.os }}
       - name: Generate arch
         run: |
@@ -62,7 +62,7 @@ jobs:
         id: hash
         run: |
           cp _output/release/${{ github.ref_name }}/${{ matrix.target }}-${{ github.ref_name }}-${{ matrix.os }}-${{ env.output_arch }}.tar.gz .
-          echo "hash-${{ matrix.target }}-${{ env.output_arch }}=$( \
+          echo "hash-${{ matrix.target }}-${{ matrix.os }}-${{ env.output_arch }}=$( \
                       sha256sum ${{ matrix.target }}-${{ github.ref_name }}-${{ matrix.os }}-${{ env.output_arch}}.tar.gz | base64 -w0 \
                     )" >> "$GITHUB_OUTPUT"
       - name: Uploading assets...
