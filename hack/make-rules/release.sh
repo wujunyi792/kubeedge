@@ -121,7 +121,6 @@ function build_kubeedge_release() {
 
   echo "building kubeedge release:" ${VERSION} "ARCH:"${ARCH} "OS:"${OS}
 
-  echo ${VERSION} > _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/version
   if [ "${OS}" == "linux" ]; then
     mkdir -p _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/cloud
     mkdir -p _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/cloud/admission
@@ -143,6 +142,7 @@ function build_kubeedge_release() {
     cp _output/local/bin/edgecore.exe _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/edge
   fi
 
+  echo ${VERSION} > _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/version
   cd _output/release/${VERSION}
   tar -czvf ${KUBEEDGE_ROOT}/_output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}.tar.gz kubeedge-${VERSION}-${OS}-${ARCH}/
 
