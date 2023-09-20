@@ -50,7 +50,7 @@ jobs:
       - name: Making and packaging
         run: |
           docker pull kubeedge/build-tools:1.17.13-ke1
-          make release WHAT=${{ matrix.target }} ARM_VERSION=${{ matrix.ARM_VERSION }}
+          make release WHAT=${{ matrix.target }} ARM_VERSION=${{ matrix.ARM_VERSION }} OS=${{ matrix.os }}
       - name: Generate arch
         run: |
           if [ "${{ matrix.ARM_VERSION }}" = "GOARM7" ]; then echo "output_arch=arm" >> $GITHUB_ENV; elif [ ${{ matrix.ARM_VERSION }} = "GOARM8" ]; then echo "output_arch=arm64" >> $GITHUB_ENV; else echo "output_arch=amd64" >> $GITHUB_ENV; fi
