@@ -43,7 +43,7 @@ function release() {
     elif [[ "${arg}" == GOARM8 ]]; then
       arm_version="GOARM8"
       ARCH="arm64"
-    elif [[ "${arg}" == linux ]]; then
+    elif [[ "${arg}" == "linux" ]]; then
       OS="linux"
     elif [[ "${arg}" == windows ]]; then
       OS="windows"
