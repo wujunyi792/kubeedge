@@ -139,7 +139,7 @@ function build_kubeedge_release() {
 
   elif [ "${OS}" == "windows" ]; then
     mkdir -p _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/edge
-    cp _output/local/bin/edgecore.exe _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/edge
+    cp _output/local/bin/edgecore _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/edge/edgecore.exe
   fi
 
   echo ${VERSION} > _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/version
