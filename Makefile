@@ -442,5 +442,6 @@ release:
 	$(RUN) hack/make-rules/release.sh $(WHAT) $(ARM_VERSION) $(OS)
 else
 release:
-	hack/make-rules/release.sh $(WHAT) $(ARM_VERSION)
+	echo ${WHAT} ${ARM_VERSION} ${OS}
+	hack/make-rules/release.sh $(WHAT) $(ARM_VERSION) $(OS)
 endif
