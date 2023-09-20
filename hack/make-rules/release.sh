@@ -80,7 +80,7 @@ function release() {
           hack/make-rules/crossbuild.sh keadm ${arm_version}
         fi
 
-        build_keadm_release $VERSION $ARCH
+        build_keadm_release $VERSION $ARCH $OS
         ;;
       "kubeedge")
         if [ "${OS}" == "linux" ]; then
@@ -160,32 +160,39 @@ function build_kubeedge_release() {
 function build_keadm_release() {
   local VERSION=""
   local ARCH="amd64"
+  local OS="linux"
 
   for arg in "$@"; do
     if [[ "${arg}" == v* ]]; then
       VERSION="${arg}"
     elif [[ "${arg}" == arm* ]]; then
       ARCH="${arg}"
+    elif [[ "${arg}" == "windows" ]]; then
+      OS="windows"
     fi
   done
 
-  echo "building keadm release:" ${VERSION} "ARCH:"${ARCH}
+  echo "building keadm release:" ${VERSION} "ARCH:"${ARCH} "OS:"${OS}
 
-  mkdir -p _output/release/${VERSION}/keadm-${VERSION}-linux-${ARCH}/keadm
+  mkdir -p _output/release/${VERSION}/keadm-${VERSION}-${OS}-${ARCH}/keadm
 
-  echo ${VERSION} > _output/release/${VERSION}/keadm-${VERSION}-linux-${ARCH}/version
-  cp _output/local/bin/keadm _output/release/${VERSION}/keadm-${VERSION}-linux-${ARCH}/keadm
+  echo ${VERSION} > _output/release/${VERSION}/keadm-${VERSION}-${OS}-${ARCH}/version
+  if [ "${OS}" == "linux" ]; then
+    cp _output/local/bin/keadm _output/release/${VERSION}/keadm-${VERSION}-${OS}-${ARCH}/keadm
+  elif [ "${OS}" == "windows" ]; then
+    cp _output/local/bin/keadm _output/release/${VERSION}/keadm-${VERSION}-${OS}-${ARCH}/keadm/keadm.exe
+  fi
 
   cd _output/release/${VERSION}
-  tar -czvf ${KUBEEDGE_ROOT}/_output/release/${VERSION}/keadm-${VERSION}-linux-${ARCH}.tar.gz keadm-${VERSION}-linux-${ARCH}/
+  tar -czvf ${KUBEEDGE_ROOT}/_output/release/${VERSION}/keadm-${VERSION}-${OS}-${ARCH}.tar.gz keadm-${VERSION}-${OS}-${ARCH}/
 
   cd $KUBEEDGE_ROOT
-  rm -r _output/release/${VERSION}/keadm-${VERSION}-linux-${ARCH}
+  rm -r _output/release/${VERSION}/keadm-${VERSION}-${OS}-${ARCH}
 
   #calculate sha512sum
-  sum=$(sha512sum _output/release/${VERSION}/keadm-${VERSION}-linux-${ARCH}.tar.gz)
+  sum=$(sha512sum _output/release/${VERSION}/keadm-${VERSION}-${OS}-${ARCH}.tar.gz)
   sumArray=($sum)
-  echo ${sumArray[0]} > _output/release/${VERSION}/checksum_keadm-${VERSION}-linux-${ARCH}.tar.gz.txt
+  echo ${sumArray[0]} > _output/release/${VERSION}/checksum_keadm-${VERSION}-${OS}-${ARCH}.tar.gz.txt
 }
 
 function build_edgesite_release() {

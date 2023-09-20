@@ -20,7 +20,7 @@ jobs:
 #        target: [kubeedge, edgesite, keadm]
 #        os: [linux]
 #        ARM_VERSION: [GOARM7, GOARM8, ""]
-        target: [kubeedge]
+        target: [kubeedge，keadm]
         os: [windows]
         ARM_VERSION: [ "" ]
 #        include:
@@ -36,6 +36,7 @@ jobs:
 #      hash-keadm-linux-amd64:    ${{ steps.hash.outputs.hash-keadm-linux-amd64 }}
 #      hash-keadm-linux-arm64:    ${{ steps.hash.outputs.hash-keadm-linux-arm64 }}
 #      hash-keadm-linux-arm:      ${{ steps.hash.outputs.hash-keadm-linux-arm }}
+      hash-keadm-windows-amd64:      ${{ steps.hash.outputs.hash-keadm-windows-amd64 }}
 #      hash-edgesite-linux-amd64: ${{ steps.hash.outputs.hash-edgesite-linux-amd64 }}
 #      hash-edgesite-linux-arm64: ${{ steps.hash.outputs.hash-edgesite-linux-arm64 }}
 #      hash-edgesite-linux-arm:   ${{ steps.hash.outputs.hash-edgesite-linux-arm }}
@@ -49,7 +50,7 @@ jobs:
           fetch-depth: 0
       - name: Making and packaging
         run: |
-          docker pull kubeedge/build-tools:1.17.13-ke1
+          if [ "${{ matrix.os }} != "windows" ]; then docker pull kubeedge/build-tools:1.17.13-ke1; fi
           make release WHAT=${{ matrix.target }} ARM_VERSION=${{ matrix.ARM_VERSION }} OS=${{ matrix.os }}
       - name: Generate arch
         run: |

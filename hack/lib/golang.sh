@@ -46,7 +46,7 @@ kubeedge::golang::verify_golang_version() {
 }
 
 kubeedge::version::get_version_info() {
-  GIT_VERSION="v0.0.6"
+  GIT_VERSION="v0.0.7"
   return
 
   GIT_COMMIT=$(git rev-parse "HEAD^{commit}" 2>/dev/null)
