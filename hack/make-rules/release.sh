@@ -121,25 +121,30 @@ function build_kubeedge_release() {
 
   echo "building kubeedge release:" ${VERSION} "ARCH:"${ARCH} "OS:"${OS}
 
-  mkdir -p _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/cloud
-  mkdir -p _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/cloud/admission
-  mkdir -p _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/cloud/cloudcore
-  mkdir -p _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/cloud/csidriver
-  mkdir -p _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/cloud/iptablesmanager
-  mkdir -p _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/cloud/controllermanager
-  mkdir -p _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/edge
-
   echo ${VERSION} > _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/version
-  cp _output/local/bin/admission _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/cloud/admission
-  cp _output/local/bin/cloudcore _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/cloud/cloudcore
-  cp _output/local/bin/csidriver _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/cloud/csidriver
-  cp _output/local/bin/iptablesmanager _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/cloud/iptablesmanager
-  cp _output/local/bin/controllermanager _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/cloud/controllermanager
+  if [ "${OS}" == "linux" ]; then
+    mkdir -p _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/cloud
+    mkdir -p _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/cloud/admission
+    mkdir -p _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/cloud/cloudcore
+    mkdir -p _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/cloud/csidriver
+    mkdir -p _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/cloud/iptablesmanager
+    mkdir -p _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/cloud/controllermanager
+    mkdir -p _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/edge
 
-  cp _output/local/bin/edgecore _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/edge
+    cp _output/local/bin/admission _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/cloud/admission
+    cp _output/local/bin/cloudcore _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/cloud/cloudcore
+    cp _output/local/bin/csidriver _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/cloud/csidriver
+    cp _output/local/bin/iptablesmanager _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/cloud/iptablesmanager
+    cp _output/local/bin/controllermanager _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/cloud/controllermanager
+    cp _output/local/bin/edgecore _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/edge
+
+  elif [ "${OS}" == "windows" ]; then
+    mkdir -p _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/edge
+    cp _output/local/bin/edgecore.exe _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/edge
+  fi
 
   cd _output/release/${VERSION}
-  tar -czvf ${KUBEEDGE_ROOT}/_output/release/${VERSION}/kubeedge-${VERSION}-linux-${ARCH}.tar.gz kubeedge-${VERSION}-${OS}-${ARCH}/
+  tar -czvf ${KUBEEDGE_ROOT}/_output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}.tar.gz kubeedge-${VERSION}-${OS}-${ARCH}/
 
   cd $KUBEEDGE_ROOT
   rm -r _output/release/${VERSION}/kubeedge-${VERSION}-${OS}-${ARCH}/
