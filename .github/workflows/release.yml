@@ -17,29 +17,31 @@ jobs:
     runs-on: ubuntu-22.04
     strategy:
       matrix:
-#        target: [kubeedge, edgesite, keadm]
-#        os: [linux]
-#        ARM_VERSION: [GOARM7, GOARM8, ""]
-        target: [kubeedge, keadm]
-        os: [windows]
-        ARM_VERSION: [ "" ]
-#        include:
-#          - target: kubeedge
-#            os: windows
-#          - target: keadm
-#            os: windows
+        target: [kubeedge, edgesite, keadm]
+        os: [linux]
+        ARM_VERSION: [GOARM7, GOARM8, ""]
+#        target: [kubeedge, keadm]
+#        os: [windows]
+#        ARM_VERSION: [ "" ]
+        include:
+          - target: kubeedge
+            os: windows
+            ARM_VERSION: ""
+          - target: keadm
+            os: windows
+            ARM_VERSION: ""
     outputs:
-#      hash-kubeedge-linux-amd64: ${{ steps.hash.outputs.hash-kubeedge-linux-amd64 }}
+      hash-kubeedge-linux-amd64: ${{ steps.hash.outputs.hash-kubeedge-linux-amd64 }}
       hash-kubeedge-windows-amd64: ${{ steps.hash.outputs.hash-kubeedge-windows-amd64 }}
-#      hash-kubeedge-linux-arm64: ${{ steps.hash.outputs.hash-kubeedge-linux-arm64 }}
-#      hash-kubeedge-linux-arm:   ${{ steps.hash.outputs.hash-kubeedge-linux-arm }}
-#      hash-keadm-linux-amd64:    ${{ steps.hash.outputs.hash-keadm-linux-amd64 }}
-#      hash-keadm-linux-arm64:    ${{ steps.hash.outputs.hash-keadm-linux-arm64 }}
-#      hash-keadm-linux-arm:      ${{ steps.hash.outputs.hash-keadm-linux-arm }}
-      hash-keadm-windows-amd64:      ${{ steps.hash.outputs.hash-keadm-windows-amd64 }}
-#      hash-edgesite-linux-amd64: ${{ steps.hash.outputs.hash-edgesite-linux-amd64 }}
-#      hash-edgesite-linux-arm64: ${{ steps.hash.outputs.hash-edgesite-linux-arm64 }}
-#      hash-edgesite-linux-arm:   ${{ steps.hash.outputs.hash-edgesite-linux-arm }}
+      hash-kubeedge-linux-arm64: ${{ steps.hash.outputs.hash-kubeedge-linux-arm64 }}
+      hash-kubeedge-linux-arm:   ${{ steps.hash.outputs.hash-kubeedge-linux-arm }}
+      hash-keadm-linux-amd64:    ${{ steps.hash.outputs.hash-keadm-linux-amd64 }}
+      hash-keadm-linux-arm64:    ${{ steps.hash.outputs.hash-keadm-linux-arm64 }}
+      hash-keadm-linux-arm:      ${{ steps.hash.outputs.hash-keadm-linux-arm }}
+      hash-keadm-windows-amd64:  ${{ steps.hash.outputs.hash-keadm-windows-amd64 }}
+      hash-edgesite-linux-amd64: ${{ steps.hash.outputs.hash-edgesite-linux-amd64 }}
+      hash-edgesite-linux-arm64: ${{ steps.hash.outputs.hash-edgesite-linux-arm64 }}
+      hash-edgesite-linux-arm:   ${{ steps.hash.outputs.hash-edgesite-linux-arm }}
     steps:
       - name: checkout code
         uses: actions/checkout@v3
@@ -83,6 +85,8 @@ jobs:
         run: |
           echo "$HASHES" | jq -r '.[] | @base64d' | sed "/^$/d" > hashes.txt
           echo "hashes=$(cat hashes.txt | base64 -w0)" >> "$GITHUB_OUTPUT"
+          cat hashes.txt
+          echo "hashes=$(cat hashes.txt | base64 -w0)"
 
   # This step calls the generic workflow to generate provenance.
   provenance:
