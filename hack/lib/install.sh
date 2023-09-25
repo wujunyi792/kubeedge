@@ -32,13 +32,13 @@ function check_kind {
   command -v kind >/dev/null 2>&1
   if [[ $? -ne 0 ]]; then
     echo "installing kind ."
-    GO111MODULE="on" go install sigs.k8s.io/kind@v0.12.0
+    GO111MODULE="on" go install sigs.k8s.io/kind@v0.18.0
     if [[ $? -ne 0 ]]; then
       echo "kind installed failed, exiting."
       exit 1
     fi
 
-    # avoid modifing go.sum and go.mod when installing the kind
+    # avoid modifying go.sum and go.mod when installing the kind
     git checkout -- go.mod go.sum
 
     export PATH=$PATH:$GOPATH/bin
@@ -52,7 +52,7 @@ function check_golangci-lint {
   GOPATH="${GOPATH:-$(go env GOPATH)}"
   echo "checking golangci-lint"
   export PATH=$PATH:$GOPATH/bin
-  expectedVersion="1.42.0"
+  expectedVersion="1.51.1"
   command -v golangci-lint >/dev/null 2>&1
   if [[ $? -ne 0 ]]; then
     install_golangci-lint
@@ -69,16 +69,16 @@ function check_golangci-lint {
 
 function install_golangci-lint {
   echo "installing golangci-lint ."
-    curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b ${GOPATH}/bin v1.42.0
-    if [[ $? -ne 0 ]]; then
-      echo "golangci-lint installed failed, exiting."
-      exit 1
-    fi
+  curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b ${GOPATH}/bin v1.51.1
+  if [[ $? -ne 0 ]]; then
+    echo "golangci-lint installed failed, exiting."
+    exit 1
+  fi
 
-    export PATH=$PATH:$GOPATH/bin
+  export PATH=$PATH:$GOPATH/bin
 }
 
-verify_containerd_installed(){
+verify_containerd_installed() {
   # verify the containerd installed
   command -v containerd >/dev/null || {
     echo "must install the containerd first"
@@ -86,7 +86,7 @@ verify_containerd_installed(){
   }
 }
 
-verify_docker_installed(){
+verify_docker_installed() {
   # verify the docker installed
   command -v docker >/dev/null || {
     echo "must install the docker first"
@@ -99,7 +99,7 @@ function install_cni_plugins() {
   CNI_DOWNLOAD_ADDR=${CNI_DOWNLOAD_ADDR:-"https://github.com/containernetworking/plugins/releases/download/v1.1.1/cni-plugins-linux-amd64-v1.1.1.tgz"}
   CNI_PKG=${CNI_DOWNLOAD_ADDR##*/}
   CNI_CONF_OVERWRITE=${CNI_CONF_OVERWRITE:-"true"}
-  echo -e "The installation of the cni plugin will overwrite the cni config file. Use export CNI_CONFIG_FILE=false to disable it."
+  echo -e "The installation of the cni plugin will overwrite the cni config file. Use export CNI_CONF_OVERWRITE=false to disable it."
 
   # install CNI plugins if not exist
   if [ ! -f "/opt/cni/bin/loopback" ]; then

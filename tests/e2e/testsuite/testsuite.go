@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/onsi/ginkgo"
+	"github.com/onsi/ginkgo/v2"
 	"github.com/onsi/gomega"
 	"k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -39,7 +39,7 @@ func CreateDeploymentTest(c clientset.Interface, replica int32, deplName string)
 	_, err = utils.GetDeployment(c, v1.NamespaceDefault, deplName)
 	gomega.Expect(err).To(gomega.BeNil())
 
-	time.Sleep(time.Second * 1)
+	time.Sleep(time.Second * 20)
 
 	ginkgo.By(fmt.Sprintf("get pod for deployment %s", deplName))
 	labelSelector := labels.SelectorFromSet(map[string]string{"app": deplName})

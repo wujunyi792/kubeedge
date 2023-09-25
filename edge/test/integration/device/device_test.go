@@ -23,7 +23,7 @@ import (
 
 	MQTT "github.com/eclipse/paho.mqtt.golang"
 	_ "github.com/mattn/go-sqlite3"
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
 	"github.com/kubeedge/kubeedge/edge/pkg/devicetwin/dtcommon"
@@ -32,7 +32,7 @@ import (
 	. "github.com/kubeedge/kubeedge/edge/test/integration/utils/helpers"
 )
 
-//Devicestate from subscribed MQTT topic
+// Devicestate from subscribed MQTT topic
 var DeviceState string
 
 type DeviceUpdates struct {
@@ -97,7 +97,7 @@ var DeviceATT dttype.Device
 var DeviceIDWithTwin string
 var DeviceTW dttype.Device
 
-//Run Test cases
+// Run Test cases
 var _ = Describe("Event Bus Testing", func() {
 	Context("Publish on eventbus topics throgh MQTT internal broker", func() {
 		BeforeEach(func() {

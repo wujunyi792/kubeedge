@@ -19,7 +19,7 @@ package application_test
 import (
 	"testing"
 
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
 	"github.com/kubeedge/kubeedge/edge/test/integration/utils"
@@ -27,13 +27,13 @@ import (
 	"github.com/kubeedge/kubeedge/edge/test/integration/utils/edge"
 )
 
-//context to load config and access across the package
+// context to load config and access across the package
 var (
 	ctx *edge.TestContext
 	cfg edge.Config
 )
 
-//Function to run the Ginkgo Test
+// Function to run the Ginkgo Test
 func TestEdgecoreAppDeployment(t *testing.T) {
 	RegisterFailHandler(Fail)
 	//var UID string

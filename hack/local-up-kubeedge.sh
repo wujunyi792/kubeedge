@@ -21,7 +21,8 @@ LOG_LEVEL=${LOG_LEVEL:-2}
 TIMEOUT=${TIMEOUT:-60}s
 PROTOCOL=${PROTOCOL:-"WebSocket"}
 CONTAINER_RUNTIME=${CONTAINER_RUNTIME:-"remote"}
-echo -e "The installation of the cni plugin will overwrite the cni config file. Use export CNI_CONFIG_FILE=false to disable it."
+KIND_IMAGE=${1:-"kindest/node:v1.26.0"}
+echo -e "The installation of the cni plugin will overwrite the cni config file. Use export CNI_CONF_OVERWRITE=false to disable it."
 
 if [[ "${CLUSTER_NAME}x" == "x" ]];then
     CLUSTER_NAME="test"
@@ -48,7 +49,7 @@ function check_prerequisites {
 # spin up cluster with kind command
 function kind_up_cluster {
   echo "Running kind: [kind create cluster ${CLUSTER_CONTEXT}]"
-  kind create cluster ${CLUSTER_CONTEXT}
+  kind create cluster ${CLUSTER_CONTEXT} --image ${KIND_IMAGE}
 }
 
 function uninstall_kubeedge {
@@ -60,6 +61,7 @@ function uninstall_kubeedge {
 
   # delete data
   rm -rf /tmp/etc/kubeedge /tmp/var/lib/kubeedge
+
 }
 
 # clean up
@@ -69,6 +71,7 @@ function cleanup {
 
   echo "Running kind: [kind delete cluster ${CLUSTER_CONTEXT}]"
   kind delete cluster ${CLUSTER_CONTEXT}
+
 }
 
 if [[ "${ENABLE_DAEMON}" = false ]]; then
@@ -80,8 +83,8 @@ fi
 
 function create_device_crd {
   echo "creating the device crd..."
-  kubectl apply -f ${KUBEEDGE_ROOT}/build/crds/devices/devices_v1alpha2_device.yaml
-  kubectl apply -f ${KUBEEDGE_ROOT}/build/crds/devices/devices_v1alpha2_devicemodel.yaml
+  kubectl apply -f ${KUBEEDGE_ROOT}/build/crds/devices/devices_v1beta1_device.yaml
+  kubectl apply -f ${KUBEEDGE_ROOT}/build/crds/devices/devices_v1beta1_devicemodel.yaml
 }
 
 function create_objectsync_crd {

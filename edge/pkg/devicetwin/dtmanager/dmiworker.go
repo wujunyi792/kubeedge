@@ -33,11 +33,11 @@ import (
 	"github.com/kubeedge/kubeedge/edge/pkg/devicetwin/dtcontext"
 	"github.com/kubeedge/kubeedge/edge/pkg/devicetwin/dttype"
 	"github.com/kubeedge/kubeedge/edge/pkg/metamanager/dao"
-	"github.com/kubeedge/kubeedge/pkg/apis/devices/v1alpha2"
-	pb "github.com/kubeedge/kubeedge/pkg/apis/dmi/v1alpha1"
+	"github.com/kubeedge/kubeedge/pkg/apis/devices/v1beta1"
+	pb "github.com/kubeedge/kubeedge/pkg/apis/dmi/v1beta1"
 )
 
-//TwinWorker deal twin event
+// TwinWorker deal twin event
 type DMIWorker struct {
 	Worker
 	Group    string
@@ -52,8 +52,8 @@ func (dw *DMIWorker) init() {
 		DeviceMu:        &sync.Mutex{},
 		DeviceModelMu:   &sync.Mutex{},
 		MapperList:      make(map[string]*pb.MapperInfo),
-		DeviceList:      make(map[string]*v1alpha2.Device),
-		DeviceModelList: make(map[string]*v1alpha2.DeviceModel),
+		DeviceList:      make(map[string]*v1beta1.Device),
+		DeviceModelList: make(map[string]*v1beta1.DeviceModel),
 	}
 
 	dw.initDMIActionCallBack()
@@ -62,7 +62,7 @@ func (dw *DMIWorker) init() {
 	dw.initDeviceMapperInfoFromDB()
 }
 
-//Start worker
+// Start worker
 func (dw DMIWorker) Start() {
 	klog.Infoln("dmi worker start")
 	dw.init()
@@ -112,8 +112,8 @@ func (dw *DMIWorker) dealMetaDeviceOperation(context *dtcontext.DTContext, resou
 	if len(resources) != 3 {
 		return fmt.Errorf("wrong resources %s", message.Router.Resource)
 	}
-	var device v1alpha2.Device
-	var dm v1alpha2.DeviceModel
+	var device v1beta1.Device
+	var dm v1beta1.DeviceModel
 	switch resources[1] {
 	case constants.ResourceTypeDevice:
 		err := json.Unmarshal(message.Content.([]byte), &device)
@@ -122,14 +122,14 @@ func (dw *DMIWorker) dealMetaDeviceOperation(context *dtcontext.DTContext, resou
 		}
 		switch message.GetOperation() {
 		case model.InsertOperation:
+			dw.dmiCache.DeviceMu.Lock()
+			dw.dmiCache.DeviceList[device.Name] = &device
+			dw.dmiCache.DeviceMu.Unlock()
 			err = dmiclient.DMIClientsImp.RegisterDevice(&device)
 			if err != nil {
 				klog.Errorf("add device %s failed with err: %v", device.Name, err)
 				return err
 			}
-			dw.dmiCache.DeviceMu.Lock()
-			dw.dmiCache.DeviceList[device.Name] = &device
-			dw.dmiCache.DeviceMu.Unlock()
 		case model.DeleteOperation:
 			err = dmiclient.DMIClientsImp.RemoveDevice(&device)
 			if err != nil {
@@ -140,14 +140,14 @@ func (dw *DMIWorker) dealMetaDeviceOperation(context *dtcontext.DTContext, resou
 			delete(dw.dmiCache.DeviceList, device.Name)
 			dw.dmiCache.DeviceMu.Unlock()
 		case model.UpdateOperation:
+			dw.dmiCache.DeviceMu.Lock()
+			dw.dmiCache.DeviceList[device.Name] = &device
+			dw.dmiCache.DeviceMu.Unlock()
 			err = dmiclient.DMIClientsImp.UpdateDevice(&device)
 			if err != nil {
 				klog.Errorf("udpate device %s failed with err: %v", device.Name, err)
 				return err
 			}
-			dw.dmiCache.DeviceMu.Lock()
-			dw.dmiCache.DeviceList[device.Name] = &device
-			dw.dmiCache.DeviceMu.Unlock()
 		default:
 			klog.Warningf("unsupported operation %s", message.GetOperation())
 		}
@@ -158,14 +158,14 @@ func (dw *DMIWorker) dealMetaDeviceOperation(context *dtcontext.DTContext, resou
 		}
 		switch message.GetOperation() {
 		case model.InsertOperation:
+			dw.dmiCache.DeviceModelMu.Lock()
+			dw.dmiCache.DeviceModelList[dm.Name] = &dm
+			dw.dmiCache.DeviceModelMu.Unlock()
 			err = dmiclient.DMIClientsImp.CreateDeviceModel(&dm)
 			if err != nil {
 				klog.Errorf("add device model %s failed with err: %v", dm.Name, err)
 				return err
 			}
-			dw.dmiCache.DeviceModelMu.Lock()
-			dw.dmiCache.DeviceModelList[dm.Name] = &dm
-			dw.dmiCache.DeviceModelMu.Unlock()
 		case model.DeleteOperation:
 			err = dmiclient.DMIClientsImp.RemoveDeviceModel(&dm)
 			if err != nil {
@@ -176,14 +176,14 @@ func (dw *DMIWorker) dealMetaDeviceOperation(context *dtcontext.DTContext, resou
 			delete(dw.dmiCache.DeviceModelList, dm.Name)
 			dw.dmiCache.DeviceModelMu.Unlock()
 		case model.UpdateOperation:
+			dw.dmiCache.DeviceModelMu.Lock()
+			dw.dmiCache.DeviceModelList[dm.Name] = &dm
+			dw.dmiCache.DeviceModelMu.Unlock()
 			err = dmiclient.DMIClientsImp.UpdateDeviceModel(&dm)
 			if err != nil {
 				klog.Errorf("update device model %s failed with err: %v", dm.Name, err)
 				return err
 			}
-			dw.dmiCache.DeviceModelMu.Lock()
-			dw.dmiCache.DeviceModelList[dm.Name] = &dm
-			dw.dmiCache.DeviceModelMu.Unlock()
 		default:
 			klog.Warningf("unsupported operation %s", message.GetOperation())
 		}
@@ -203,7 +203,7 @@ func (dw *DMIWorker) initDeviceModelInfoFromDB() {
 	}
 
 	for _, meta := range *metas {
-		deviceModel := v1alpha2.DeviceModel{}
+		deviceModel := v1beta1.DeviceModel{}
 		if err := json.Unmarshal([]byte(meta), &deviceModel); err != nil {
 			klog.Errorf("fail to unmarshal device model info from db with err: %v", err)
 			return
@@ -223,7 +223,7 @@ func (dw *DMIWorker) initDeviceInfoFromDB() {
 	}
 
 	for _, meta := range *metas {
-		device := v1alpha2.Device{}
+		device := v1beta1.Device{}
 		if err := json.Unmarshal([]byte(meta), &device); err != nil {
 			klog.Errorf("fail to unmarshal device info from db with err: %v", err)
 			return

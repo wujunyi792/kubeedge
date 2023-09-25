@@ -20,7 +20,7 @@ import (
 	"fmt"
 	"time"
 
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	metav1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -35,7 +35,7 @@ import (
 
 var DeploymentTestTimerGroup = utils.NewTestTimerGroup()
 
-//Run Test cases
+// Run Test cases
 var _ = Describe("Application deployment test in E2E scenario using EdgeSite", func() {
 	var UID string
 	var testTimer *utils.TestTimer

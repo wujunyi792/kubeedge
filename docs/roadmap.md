@@ -6,104 +6,151 @@ The [milestones defined in GitHub](https://github.com/kubeedge/kubeedge/mileston
 
 The roadmap below outlines new features that will be added to KubeEdge.
 
-## 2021 H1
+## 2023 H1 
 
-### Core framework
+### SIG Node
 
-#### Edge side list-watch
-- Support list-watch interface at edge
+- Support WasmEdge integration on KubeEdge edgenode
+- Support Kubectl attach to container running on edgenode
+- Update Kubernetes dependency to v1.24.14, switch default container runtime at edge to containerd
 
-#### Custom message transmission between cloud and edge
-- Support transmission of custom message between cloud and edge
+### SIG Device-IOT
 
-#### Support multi-instance cloudcore
+- Provide Modbus mapper based on DMI
+- DMI Data plane
+- Mapper framework support for DMI
 
-#### Integration and verification of third-party CNI
-- Flannel, Calico, etc.
+### SIG Security
 
-#### Integration and verification of third-party CSI
-- Rook, OpenEBS, etc.
+- Support authentication and authorization for Kube-API endpoint for applications on edge nodes
+- Enhancements for edge plaintext storage, ensure tokens are not persisted on disk
 
-#### Support managing clusters at edge from cloud (aka. EdgeSite)
+### SIG Scalability
 
-#### Support ingress/gateway at edge.
+- Support cluster scope resource reliable delivery to edge nodes
+- CloudCore memory usage is reduced by 40%, through unified generic informer and reduce unnecessary cache
 
-### Maintainability
+### SIG Networking
 
-#### Deployment optimization
-- Easier deployment
-- Admission controller automated deployment
+- Add configurable field TunnelLimitConfig to edge-tunnel module
+- EdgeMesh container network supports CNI features
 
-#### Automatic configuration of edge application offline migration time
-- Modify Default tolerationSeconds Automatically
+### SIG AI
 
-### IOT Device management
+- Sedna
+  - Support unstructured lifelong learning
+  - Support unseen task recognition
+  - Support displaying knowledge base
 
-#### Device Mapper framework standard and framework generator
-- Formulate mapper framework standard
+- Ianvs
+  - Support lifelong learning throughout entire lifecycle
+  - Provide classic lifelong learning testing metrics and support for visualizing test results
+  - Provide real-world datasets and rich examples for lifelong learning testing
 
-#### Support mappers of more protocols
-- OPC-UA mapper
-- ONVIF mapper
+### SIG Testing
 
-### Security
+- Provide node conformance test suite
+- Improve unit test coverage
 
-#### Complete security vulnerability scanning
+### SIG Cluster-Lifecycle
 
+- Provide a tool keink for running local KubeEdge clusters using Docker container “nodes”
 
-### Test
+### UI
 
-#### Improve the performance and e2e tests with more metrics and scenarios.
+- Alpha version of KubeEdge Dashboard
+- Re-design KubeEdge website
 
+## 2023 H2
 
-### Edge-cloud synergy AI
+### SIG Node
 
-#### Supports KubeFlow/ONNX/Pytorch/Mindspore
+- Support edge nodes running on Windows.
+- Capabilities enhancements for edge nodes, such as support static pods, event reporting and configurable application migration policies.
+- Support edge nodes running on RTOS systems.
+- Enhancements to device plugin, such as support for multiple virtual GPUs.
+- Support for serverless computing.
+- Feature of upgrading edge nodes from cloud move to GA.
+- Optimization of node group features, such as support for more differentiated configuration parameters.
 
-#### Edge-cloud synergy training and inference
+### SIG Device-IOT
 
+- DMI data plane support (H1 has completed design).
+- Migration solution for edge devices among multi-nodes based on DMI.
+- Mapper framework support for DMI.
+- Research on multi-language mappers support.
+- Integration with time-series databases and other databases.
+- Refactoring of Device and DeviceModel CRDs.
+- Enhanced reliability for custom message transmission.
 
-### MEC
+### SIG Security
 
-#### Cross-edge cloud service discovery
+- SLSA / CodeQL (There is still some provenance work remaining to reach SLSA L4).
+- Spiffe Research.
+- Support for certificates with multiple encryption algorithms, and provide interface capabilities.
 
-#### 5G network capability exposure
+### SIG Scalability
 
+- Scalability and performance testing with EdgeMesh integrated.
+- Scalability and performance testing for IoT devices scenario.
 
-## 2021 H2
+### Stability
 
-### Core framework
+- Stability maintenance of CloudCore, including stability testing and issue resolution.
+- EdgeMesh stability.
+- Enhanced reliability of cloud-edge collaboration, such as stability improvement of Edge Kube-API interface and logs/exec feature.
 
-#### Custom message transmission between cloud and edge
-- Support CloudEvent protocol
+### SIG Testing
 
-#### Cross subnet communication of Data plane 
-- Edge-edge cross subnet 
-- Edge-cloud cross subnet
+- Increase unit test coverage Improve.
+- Improve e2e test case coverage (scenario-based coverage).
+- Integration testing.
+- Runtime and K8s version compatibility test.
+- Keadm cross version compatibility test.
+- Cloud-Edge cross version compatibility test.
 
-#### Unified Service Mesh support (Integrate with Istio/OSM etc.)
+### SIG Networking
 
-#### Cloud-edge synergy monitoring
-- Provide support with prometheus push-gateway mode
-- Data management with support for ingestion of telemetry data and analytics at the edge.
+- Node offline optimization
+  - When a node goes offline, other nodes receive the update and remove the corresponding backend from the endpoint.
+- Large-scale optimization
+  - In large-scale deployments, there is a high load on the edge kube apiserver. Consider using IPVS (IP Virtual Server) technology to handle the requests efficiently.
+  - Having a large number of services significantly increases the number of iptables rules on the nodes. Container Network supports CNI features.
+- Performance optimization: Kernel-level traffic forwarding based on eBPF (extended Berkeley Packet Filter).
+- Distributed messaging system.
 
-### IOT Device management
+### SIG Cluster-Lifecycle
 
-#### Device Mapper framework standard and framework generator
-- Develop mapper framework generator
+- Support for Windows installation and deployment.
+- Pre-download of images for edge applications.
+- Router High Availability (HA) support.
 
-#### Support mappers of more protocols
-- GB/T 28181 mapper
+### Docs
 
-### Edge-cloud synergy AI
+- Optimization of website documentation, including directory restructuring and improved comprehensiveness.
+- Support for updating documentation versions.
+- Completion of official website documentation, including the DMI developer guide, operational guide for monitoring and etc.
+- Publish cases on website case studies.
 
-#### Intelligent edge benchmark
+### UI
 
+- Dashboard release iteration.
+- Add case studies on website.
+- Add job center on website.
+- Support for versioning on the website.
 
-### MEC
+### SIG AI
 
-#### Cloud-network convergence
+- Support semi-automatic annotation in edge-cloud collaborative lifelong learning.
+- Support runtime unseen task processing in edge-cloud collaborative lifelong learning.
+- Support advanced offline unseen task processing in edge-cloud collaborative lifelong learning.
 
-#### Service catalog
+### SIG Robotics
 
-#### Cross-edge cloud application roaming
+- Add RoboDev Repository: Make it easier for developers to build robotic applications.
+- Add RTF(ready to fly) Robotics E2E solutions: Teleoperation, RoboPilot.
+
+### Experience 
+
+- Example library enhancement
+- Go online to Killer-Coda

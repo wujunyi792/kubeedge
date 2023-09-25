@@ -17,7 +17,7 @@ limitations under the License.
 package keadm
 
 import (
-	. "github.com/onsi/ginkgo"
+	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -31,7 +31,7 @@ import (
 
 var DeploymentTestTimerGroup = utils.NewTestTimerGroup()
 
-//Run Test cases
+// Run Test cases
 var _ = Describe("Application deployment test in keadm E2E scenario", func() {
 	var testTimer *utils.TestTimer
 	var testSpecReport GinkgoTestDescription
