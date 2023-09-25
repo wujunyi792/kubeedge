@@ -74,10 +74,10 @@ function release() {
         build_edgesite_release $VERSION $ARCH
         ;;
       "keadm")
-        if [ "${ARCH}" == "amd64" ]; then
+        if [ "${ARCH}" == "amd64" ] && [ "${OS}" == "linux" ]; then
           hack/make-rules/build.sh keadm
         else
-          hack/make-rules/crossbuild.sh keadm ${arm_version}
+          hack/make-rules/crossbuild.sh keadm ${arm_version} GOARCH${ARCH} GOOS${OS}
         fi
 
         build_keadm_release $VERSION $ARCH $OS
@@ -87,12 +87,12 @@ function release() {
           if [ "${ARCH}" == "amd64" ]; then
             hack/make-rules/build.sh cloudcore admission edgecore csidriver iptablesmanager controllermanager
           else
-            hack/make-rules/crossbuild.sh cloudcore admission edgecore csidriver iptablesmanager controllermanager ${arm_version}
+            hack/make-rules/crossbuild.sh cloudcore admission edgecore csidriver iptablesmanager controllermanager ${arm_version} GOOS${OS} GOARCH${ARCH}
           fi
         fi
 
         if [ "${OS}" == "windows" ]; then
-          hack/make-rules/build.sh edgecore
+          hack/make-rules/crossbuild.sh edgecore GOOS${OS} GOARCH${ARCH}
         fi
 
         build_kubeedge_release $VERSION $ARCH $OS

@@ -46,7 +46,7 @@ kubeedge::golang::verify_golang_version() {
 }
 
 kubeedge::version::get_version_info() {
-  GIT_VERSION="v0.0.13"
+  GIT_VERSION="v0.0.14"
   return
 
   GIT_COMMIT=$(git rev-parse "HEAD^{commit}" 2>/dev/null)
@@ -269,11 +269,17 @@ kubeedge::golang::cross_build_place_binaries() {
 
   local -a targets=()
   local goarm=${goarm:-${KUBEEDGE_ALL_CROSS_GOARMS[0]}}
+  local goos="linux"
+  local goarch="amd64"
 
   for arg in "$@"; do
       if [[ "${arg}" == GOARM* ]]; then
         # Assume arguments starting with a dash are flags to pass to go.
         goarm="${arg##*GOARM}"
+      elif [[ "${arg}" == GOOS* ]]; then
+        goos="${arg##*GOOS}"
+      elif [[ "${arg}" == GOARCH* ]]; then
+        goarch="${arg##*GOARCH}"
       else
         targets+=("$(kubeedge::golang::get_target_by_binary $arg)")
       fi
@@ -296,16 +302,22 @@ kubeedge::golang::cross_build_place_binaries() {
 
   mkdir -p ${KUBEEDGE_OUTPUT_BINPATH}
   for bin in ${binaries[@]}; do
-    echo "cross building $bin GOARM${goarm}"
+    echo "cross building $bin GOARM${goarm} ${goos} ${goarch}"
     local name="${bin##*/}"
-    if [ "${goarm}" == "8" ]; then
+    if [ "${goos}" == "linux" ] ; then
+      if [ "${goarm}" == "8" ]; then
+        set -x
+        GOARM="" # need to clear the value since golang compiler doesn't allow this env when building the binary for ARMv8.
+        GOARCH=arm64 GOOS=${goos} CGO_ENABLED=1 CC=aarch64-linux-gnu-gcc go build -o ${KUBEEDGE_OUTPUT_BINPATH}/${name} -ldflags "$ldflags" $bin
+        set +x
+      elif [ "${goarm}" == "7" ]; then
+        set -x
+        GOARCH=arm GOOS=${goos} GOARM=${goarm} CGO_ENABLED=1 CC=arm-linux-gnueabihf-gcc go build -o ${KUBEEDGE_OUTPUT_BINPATH}/${name} -ldflags "$ldflags" $bin
+        set +x
+      fi
+    elif [ "${goos}" == "windows" ]; then
       set -x
-      GOARM="" # need to clear the value since golang compiler doesn't allow this env when building the binary for ARMv8.
-      GOARCH=arm64 GOOS="linux" CGO_ENABLED=1 CC=aarch64-linux-gnu-gcc go build -o ${KUBEEDGE_OUTPUT_BINPATH}/${name} -ldflags "$ldflags" $bin
-      set +x
-    elif [ "${goarm}" == "7" ]; then
-      set -x
-      GOARCH=arm GOOS="linux" GOARM=${goarm} CGO_ENABLED=1 CC=arm-linux-gnueabihf-gcc go build -o ${KUBEEDGE_OUTPUT_BINPATH}/${name} -ldflags "$ldflags" $bin
+      GOARCH=${goarch} GOOS=${goos} CGO_ENABLED=1 go build -o ${KUBEEDGE_OUTPUT_BINPATH}/${name} -ldflags "$ldflags" $bin
       set +x
     fi
   done
