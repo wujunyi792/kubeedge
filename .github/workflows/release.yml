@@ -50,11 +50,15 @@ jobs:
           # 0 indicates all history for all branches and tags.
           # for `git describe --tags` in Makefile.
           fetch-depth: 0
-      - name: Making and packaging
+      - name: Making and packaging(linux)
+        if: matrix.os == 'linux'
         run: |
           docker pull kubeedge/build-tools:1.17.13-ke1
-          sudo apt-get install -y mingw-w64
-          make release WHAT=${{ matrix.target }} ARM_VERSION=${{ matrix.ARM_VERSION }} OS=${{ matrix.os }}
+          make release WHAT=${{ matrix.target }} ARM_VERSION=${{ matrix.ARM_VERSION }} OS=${{ matrix.os }} CONTAINER_RUN_OPTIONS=true
+      - name: Making and packaging(windows)
+        if: matrix.os == 'windows'
+        run: |
+          make release WHAT=${{ matrix.target }} ARM_VERSION=${{ matrix.ARM_VERSION }} OS=${{ matrix.os }} CONTAINER_RUN_OPTIONS=false
       - name: Generate arch
         run: |
           if [ "${{ matrix.ARM_VERSION }}" = "GOARM7" ]; then echo "output_arch=arm" >> $GITHUB_ENV; elif [ ${{ matrix.ARM_VERSION }} = "GOARM8" ]; then echo "output_arch=arm64" >> $GITHUB_ENV; else echo "output_arch=amd64" >> $GITHUB_ENV; fi
