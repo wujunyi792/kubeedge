@@ -46,7 +46,7 @@ kubeedge::golang::verify_golang_version() {
 }
 
 kubeedge::version::get_version_info() {
-  GIT_VERSION="v0.0.14"
+  GIT_VERSION="v0.0.15"
   return
 
   GIT_COMMIT=$(git rev-parse "HEAD^{commit}" 2>/dev/null)
@@ -302,9 +302,9 @@ kubeedge::golang::cross_build_place_binaries() {
 
   mkdir -p ${KUBEEDGE_OUTPUT_BINPATH}
   for bin in ${binaries[@]}; do
-    echo "cross building $bin GOARM${goarm} ${goos} ${goarch}"
     local name="${bin##*/}"
     if [ "${goos}" == "linux" ] ; then
+      echo "cross building $bin GOARM${goarm} ${goos} ${goarch}"
       if [ "${goarm}" == "8" ]; then
         set -x
         GOARM="" # need to clear the value since golang compiler doesn't allow this env when building the binary for ARMv8.
@@ -316,8 +316,9 @@ kubeedge::golang::cross_build_place_binaries() {
         set +x
       fi
     elif [ "${goos}" == "windows" ]; then
+      echo "cross building $bin ${goos} ${goarch}"
       set -x
-      GOARCH=${goarch} GOOS=${goos} CGO_ENABLED=1 go build -o ${KUBEEDGE_OUTPUT_BINPATH}/${name} -ldflags "$ldflags" $bin
+      GOARCH=${goarch} GOOS=${goos} CGO_ENABLED=1 CC=x86_64-w64-mingw32-gcc go build -o ${KUBEEDGE_OUTPUT_BINPATH}/${name} -ldflags "$ldflags" $bin
       set +x
     fi
   done
