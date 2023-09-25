@@ -46,7 +46,7 @@ kubeedge::golang::verify_golang_version() {
 }
 
 kubeedge::version::get_version_info() {
-  GIT_VERSION="v0.0.16"
+  GIT_VERSION="v0.0.17"
   return
 
   GIT_COMMIT=$(git rev-parse "HEAD^{commit}" 2>/dev/null)
@@ -318,7 +318,7 @@ kubeedge::golang::cross_build_place_binaries() {
     elif [ "${goos}" == "windows" ]; then
       echo "cross building $bin ${goos} ${goarch}"
       set -x
-      sudo apt-get install -y binutils-mingw-w64
+      apt-get install -y binutils-mingw-w64
       GOARCH=${goarch} GOOS=${goos} CGO_ENABLED=1 CC=x86_64-w64-mingw32-gcc go build -o ${KUBEEDGE_OUTPUT_BINPATH}/${name} -ldflags "$ldflags" $bin
       set +x
     fi
