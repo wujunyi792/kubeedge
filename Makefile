@@ -439,12 +439,12 @@ release:
 	@echo "$$RELEASE_HELP_INFO"
 else ifeq ($(BUILD_WITH_CONTAINER),true)
 release:
-	sudo apt-get install -y mingw-w64
+	sudo apt-get install -y mingw-w64 gcc-mingw-w64-x86-64
 	echo ${PATH}
 	$(RUN) hack/make-rules/release.sh $(WHAT) $(ARM_VERSION) $(OS)
 else
 release:
-	sudo apt-get install -y mingw-w64
+	sudo apt-get install -y mingw-w64 gcc-mingw-w64-x86-64
 	echo ${PATH}
 	echo ${WHAT} ${ARM_VERSION} ${OS}
 	hack/make-rules/release.sh $(WHAT) $(ARM_VERSION) $(OS)
