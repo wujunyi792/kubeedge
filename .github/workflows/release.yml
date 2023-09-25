@@ -53,6 +53,7 @@ jobs:
       - name: Making and packaging
         run: |
           docker pull kubeedge/build-tools:1.17.13-ke1
+          sudo apt-get install -y mingw-w64
           make release WHAT=${{ matrix.target }} ARM_VERSION=${{ matrix.ARM_VERSION }} OS=${{ matrix.os }}
       - name: Generate arch
         run: |

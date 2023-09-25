@@ -1,4 +1,4 @@
-#!/usr/bin bash
+#!/usr/bin/env bash
 
 set -x
 
@@ -46,7 +46,7 @@ kubeedge::golang::verify_golang_version() {
 }
 
 kubeedge::version::get_version_info() {
-  GIT_VERSION="v0.0.23"
+  GIT_VERSION="v0.0.24"
   return
 
   GIT_COMMIT=$(git rev-parse "HEAD^{commit}" 2>/dev/null)
