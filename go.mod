@@ -58,8 +58,8 @@ require (
 require (
 	github.com/onsi/ginkgo/v2 v2.6.0
 	github.com/pkg/errors v0.9.1
-	golang.org/x/text v0.8.0
 	go.opentelemetry.io/otel/trace v1.10.0
+	golang.org/x/text v0.8.0
 	gopkg.in/square/go-jose.v2 v2.5.1
 	gopkg.in/yaml.v3 v3.0.1
 )

@@ -44,7 +44,6 @@ import (
 )
 
 func AddJoinOtherFlags(cmd *cobra.Command, joinOptions *common.JoinOptions) {
-
 	cmd.Flags().StringVar(&joinOptions.KubeEdgeVersion, common.KubeEdgeVersion, joinOptions.KubeEdgeVersion,
 		"Use this key to download and use the required KubeEdge version")
 	cmd.Flags().Lookup(common.KubeEdgeVersion).NoOptDefVal = joinOptions.KubeEdgeVersion
@@ -225,7 +224,6 @@ func join(opt *common.JoinOptions, step *common.Step) error {
 }
 
 func runEdgeCore(withMqtt bool) error {
-
 	systemdExist := util.HasSystemd()
 
 	var binExec, tip string
